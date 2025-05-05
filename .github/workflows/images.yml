@@ -70,14 +70,6 @@ jobs:
             latest=auto
             prefix=
             suffix=
-      - name: Certificate
-        if: github.event_name != 'pull_request'
-        # Write the certificate (Secret) to a file
-        run: |
-          # Instead of using a certificate, create a dummy one for simulation mode
-          mkdir -p tee
-          openssl genrsa -out tee/private.pem -3 3072
-
       - name: Build
         uses: docker/build-push-action@v6
         with:
@@ -86,10 +78,12 @@ jobs:
             VERSION=${{ steps.prep.outputs.binary_version }}
           context: ./
           file: ./Dockerfile
-          secret-files: |
-            private_key=./tee/private.pem
           platforms: linux/amd64
           push: true
-          #tags: ${{ steps.prep.outputs.tags }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+          # Add simulation mode environment variables
+          outputs: |
+            type=docker,name=tee-worker,push=true,annotations-index=runtime-env:OE_SIMULATION=1
+            type=docker,name=tee-worker,push=true,annotations-index=runtime-env:STANDALONE=true
+            type=docker,name=tee-worker,push=true,annotations-index=runtime-env:SKIP_VALIDATION=true
