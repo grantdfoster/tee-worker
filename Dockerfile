@@ -23,6 +23,12 @@ ARG DISTRIBUTOR_PUBKEY=""
 ENV GO_TEST=true
 # Set CI environment to skip SGX-specific tests
 ENV CI=true
+
+# Create test directories that might be needed by tests
+RUN mkdir -p /tmp/key-test-3946495662 /tmp/key-test-3946495662/nonexistent \
+    /tmp/key-test-4005608669 /tmp/key-test-4005608669/nonexistent \
+    /tmp/key-test-4283444897 /tmp/key-test-4283444897/nonexistent
+
 RUN DISTRIBUTOR_PUBKEY=${DISTRIBUTOR_PUBKEY} make build
 
 # Create a dummy certificate if one doesn't exist

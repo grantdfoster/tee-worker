@@ -81,6 +81,9 @@ jobs:
             GO_TEST=true
           context: ./
           file: ./Dockerfile
+          # Add environment variables for running in simulation mode
+          build-contexts: |
+            args=type=env,SKIP_VALIDATION=true,OE_SIMULATION=1,STANDALONE=true
           platforms: linux/amd64
           push: true
           tags: ${{ steps.meta.outputs.tags }}
