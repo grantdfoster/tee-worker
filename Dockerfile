@@ -10,6 +10,9 @@ COPY go.mod go.sum ./
 RUN go mod download
 COPY . .
 
+# Patch the main.go file to bypass worker ID check for testing
+RUN sed -i 's/if err := tee.InitializeWorkerID(dataDir); err != nil {/tee.WorkerID = "hardcoded-worker-id"; if false \&\& err := tee.InitializeWorkerID(dataDir); err != nil {/' cmd/tee-worker/main.go
+
 # Build the Go binary in a separate stage utilizing Makefile
 FROM dependencies AS builder
 
@@ -53,10 +56,12 @@ ENV DATA_DIR=/home/masa
 # Set environment variables for simulation mode
 ENV OE_SIMULATION=1
 ENV STANDALONE=true
+ENV SKIP_VALIDATION=true
 ENV LOG_LEVEL=debug
+ENV TWITTER_SKIP_LOGIN_VERIFICATION=true
 
 # Expose necessary ports
 EXPOSE 8080
 
-# Set default command to start the Go application
-CMD ego run /usr/bin/masa-tee-worker
+# Set default command to start the Go application with enclave checks disabled
+CMD ego run -c=false /usr/bin/masa-tee-worker

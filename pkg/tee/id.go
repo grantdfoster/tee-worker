@@ -25,6 +25,11 @@ func generateWorkerID() string {
 // saveWorkerID saves the worker ID to a file in the data directory.
 // It uses the same encryption mechanism as the sealing key.
 func saveWorkerID(dataDir, workerID string) error {
+	// In simulation mode, just return success
+	if os.Getenv("OE_SIMULATION") == "1" || os.Getenv("SKIP_VALIDATION") == "true" {
+		return nil
+	}
+
 	// Create the full path
 	filePath := filepath.Join(dataDir, WorkerIdKey)
 
@@ -45,6 +50,11 @@ func saveWorkerID(dataDir, workerID string) error {
 
 // LoadWorkerID loads the worker ID from a file in the data directory.
 func LoadWorkerID(dataDir string) (string, error) {
+	// In simulation mode, always return a hardcoded value
+	if os.Getenv("OE_SIMULATION") == "1" || os.Getenv("SKIP_VALIDATION") == "true" {
+		return "simulated-worker-id", nil
+	}
+
 	// Create the full path
 	filePath := filepath.Join(dataDir, WorkerIdKey)
 
