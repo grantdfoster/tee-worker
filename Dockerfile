@@ -19,6 +19,8 @@ FROM dependencies AS builder
 ENV VERSION=${VERSION}
 # Make an empty DISTRIBUTOR_PUBKEY to prevent validation errors
 ARG DISTRIBUTOR_PUBKEY=""
+# Set GO_TEST for tests to correctly handle TEE operations
+ENV GO_TEST=true
 RUN DISTRIBUTOR_PUBKEY=${DISTRIBUTOR_PUBKEY} make build
 
 # Create a dummy certificate if one doesn't exist

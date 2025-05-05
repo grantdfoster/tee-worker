@@ -99,7 +99,10 @@ func deriveKey(inputKey, salt string) string {
 // SealWithKey uses the TEE Product Key or AES to encrypt the plaintext
 func SealWithKey(salt string, plaintext []byte) (string, error) {
 	// In simulation mode, just encode the data without encryption
-	if SealStandaloneMode || isSimulationEnvironment() {
+	// But we should still use the normal process for unit tests in standalone mode
+	inTestEnvironment := getEnv("GO_TEST", "") != ""
+
+	if (SealStandaloneMode || isSimulationEnvironment()) && !inTestEnvironment {
 		simulatedEncryption := fmt.Sprintf("SIM_ENCRYPTED:%s:%s", salt, string(plaintext))
 		b64 := base64.StdEncoding.EncodeToString([]byte(simulatedEncryption))
 		return b64, nil
@@ -147,8 +150,11 @@ func SealWithKey(salt string, plaintext []byte) (string, error) {
 }
 
 func UnsealWithKey(salt string, encryptedText string) ([]byte, error) {
+	// Don't use simulation mode special handling during tests
+	inTestEnvironment := getEnv("GO_TEST", "") != ""
+
 	// Handle simulation mode
-	if SealStandaloneMode || isSimulationEnvironment() {
+	if (SealStandaloneMode || isSimulationEnvironment()) && !inTestEnvironment {
 		b64, err := base64.StdEncoding.DecodeString(encryptedText)
 		if err != nil {
 			return nil, err
@@ -215,6 +221,11 @@ func UnsealWithKey(salt string, encryptedText string) ([]byte, error) {
 
 // isSimulationEnvironment checks if we're running in a simulation environment
 func isSimulationEnvironment() bool {
+	// Don't use simulation mode behavior during tests
+	if getEnv("GO_TEST", "") != "" {
+		return false
+	}
+
 	return SealStandaloneMode ||
 		getEnv("OE_SIMULATION", "") == "1" ||
 		getEnv("SKIP_VALIDATION", "") == "true"
