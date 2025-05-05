@@ -64,4 +64,4 @@ ENV TWITTER_SKIP_LOGIN_VERIFICATION=true
 EXPOSE 8080
 
 # Set default command to start the Go application with enclave checks disabled
-CMD ego run -c=false /usr/bin/masa-tee-worker
+CMD ego run --simulate /usr/bin/masa-tee-worker
