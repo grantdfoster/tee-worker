@@ -60,7 +60,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@2a4836ac76fe8f5d0ee3a0d89aa12a80cc552ad3
         with:
-          images: masaengineering/tee-worker
+          images: grantdfoster/tee-worker
           tags: |
             type=ref,event=branch,suffix=-{{date 'YYYYMMDDHHmmss'}}
             type=semver,pattern={{raw}}
