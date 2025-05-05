@@ -84,7 +84,6 @@ jobs:
           builder: ${{ steps.buildx.outputs.name }}
           build-args: |
             VERSION=${{ steps.prep.outputs.binary_version }}
-            DISTRIBUTOR_PUBKEY=""
           context: ./
           file: ./Dockerfile
           secret-files: |
