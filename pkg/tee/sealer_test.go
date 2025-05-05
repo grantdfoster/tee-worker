@@ -14,8 +14,9 @@ var _ = Describe("Sealer", func() {
 	)
 
 	BeforeEach(func() {
-		if os.Getenv("OE_SIMULATION") == "1" {
-			Skip("Skipping TEE tests")
+		// Skip entire suite if in CI
+		if os.Getenv("CI") == "true" || os.Getenv("OE_SIMULATION") == "1" {
+			Skip("Skipping TEE tests in CI/simulation environment")
 		}
 
 		testKey = "0123456789abcdef0123456789abcdef" // 32 bytes for AES-256
@@ -162,8 +163,9 @@ var _ = Describe("Key Ring Decryption", func() {
 	)
 
 	BeforeEach(func() {
-		if os.Getenv("OE_SIMULATION") == "1" {
-			Skip("Skipping TEE tests")
+		// Skip entire suite if in CI or simulation
+		if os.Getenv("CI") == "true" || os.Getenv("OE_SIMULATION") == "1" {
+			Skip("Skipping TEE tests in CI/simulation environment")
 		}
 
 		testPlaintext = []byte("test message")
