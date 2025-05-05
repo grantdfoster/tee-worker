@@ -70,11 +70,11 @@ jobs:
             latest=auto
             prefix=
             suffix=
-      # - name: Certificate
-      #   if: github.event_name != 'pull_request'
-      #   # Write the certificate (Secret) to a file
-      #   run: |
-      #     echo "${{ secrets.CERTIFICATE }}" > tee/private.pem
+      - name: Certificate
+        if: github.event_name != 'pull_request'
+        # Write the certificate (Secret) to a file
+        run: |
+          echo "${{ secrets.CERTIFICATE }}" > tee/private.pem
 
       - name: Build
         uses: docker/build-push-action@v6
@@ -82,11 +82,11 @@ jobs:
           builder: ${{ steps.buildx.outputs.name }}
           build-args: |
             VERSION=${{ steps.prep.outputs.binary_version }}
-            DISTRIBUTOR_PUBKEY=LS0tLS1CRUdJTiBQVUJMSUMgS0VZLS0tLS0KTUlJQ0h6QU5CZ2txaGtpRzl3MEJBUUVGQUFPQ0Fnd0FNSUlDQndLQ0FnQUs1N1I5a2YvbmQxUGcvcjVnSm1HcAo3bGhGeCtrK3RVWGxydmVOVDB0bnVHZmF4TGhIbHZoc2JKSnVWTi9uYnVBMG5NWjRzLzdrV3YwUnB3OWQ4YTUzCmVraVZnWG1sYWFWTDc0UGtxV3l0SmtpdUcvZjQ3Yks2RlV2MzVNVFFQWXhaRzJoclF2VzZlNmsvV3pWd0V6TjAKUWVpeGpKdmcwTmFMSFNib3RkVERVQ1BvVG51alVoVmNpWDkzOEROakVSaDl1RHZ4V0dHWHNEeVVGWmNqRjZFRwpub1dJSnR3VFBML0d1SDhTQXZVOUtGTTh6Zi9ESjlZNzJCbVRTVmNGWU1UMUhlWjFrdWNiL3FwNll1eW4wemRECmxhSUtreG9DSnI2aFZ0UjVoWDFVRG9jS0xnbE8yQUFkdWZpZlhlM05KV0hObmRBK21ibjl0UE9XWEtSMVByemgKQkdxYkEyLy9CYUFNZGpQODlsY2dwQ0VRRm1HMTYzMUZUaEovS0ZTdUl6Y2tJWFFWMkMwbElkMEpxQkw2NlNQZgpXbllZaTRJRDNFNW1rMDhZWnYzVkRhVGdBQk12WDNlbFZtQjZpNURmaEVyN0ttdTBESS9YM01ZZUtpMytQOElZCkNvSERxcWtFU3ZlQjQ5TXI0NmtFVUlLWmg1MWxmK3dQTVYwZ3lTSVVHMU5NWWp5TS9KeC9LWXlscHRId21Ma1QKc3daZTJic09EV2QrakZSR0lDaEVFZHd3NFpjL3lCVGhHRkh5MlF1OFlZd0lFbFFKVk1jalZ0UmljUit2NDFnMQp3Nzg4SEZ2ZkFsUHNtTmRwRTFaKyt2VHJ3WXlzVlZTdVl2QVNUbjhnZXdvK2padTY3MU8yZldacDkvNXRTUjFNCjlJdEJlUDZrMGlIY1hYRkQ5MFNWUVFJQkF3PT0KLS0tLS1FTkQgUFVCTElDIEtFWS0tLS0tCg==
+            DISTRIBUTOR_PUBKEY=MIICHzANBgkqhkiG9w0BAQEFAAOCAgwAMIICBwKCAgAK57R9kf/nd1Pg/r5gJmGp7lhFx+k+tUXlrveNT0tnuGfaxLhHlvhsbJJuVN/nbuA0nMZ4s/7kWv0Rpw9d8a53ekiVgXmlaaVL74PkqWytJkiuG/f47bK6FUv35MTQPYxZG2hrQvW6e6k/WzVwEzN0QeixjJvg0NaLHSbotdTDUCPoTnujUhVciX938DNjERh9uDvxWGGXsDyUFZcjF6EGnoWIJtwTPL/GuH8SAvU9KFM8zf/DJ9Y72BmTSVcFYMT1HeZ1kucb/qp6Yuyn0zdDlaIKkxoCJr6hVtR5hX1UDocKLglO2AAdufifXe3NJWHNndA+mbn9tPOWXKR1PrzhBGqbA2//BaAMdjP89lcgpCEQFmG1631FThJ/KFSuIzckIXQV2C0lId0JqBL66SPfWnYYi4ID3E5mk08YZv3VDaTgABMvX3elVmB6i5DfhEr7Kmu0DI/X3MYeKi3+P8IYCoHDqqkESveB49Mr46kEUIKZh51lf+wPMV0gySIUG1NMYjyM/Jx/KYylptHwmLkTswZe2bsODWd+jFRGIChEEdww4Zc/yBThGFHy2Qu8YYwIElQJVMcjVtRicR+v41g1w788HFvfAlPsmNdpE1Z++vTrwYysVVSuYvASTn8gewo+jZu671O2fWZp9/5tSR1M9ItBeP6k0iHcXXFD90SVQQIBAw==
           context: ./
           file: ./Dockerfile
-          # secret-files: |
-          #   private_key=./tee/private.pem
+          secret-files: |
+            private_key=./tee/private.pem
           platforms: linux/amd64
           push: true
           #tags: ${{ steps.prep.outputs.tags }}
