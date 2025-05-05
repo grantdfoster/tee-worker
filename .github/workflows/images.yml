@@ -74,7 +74,9 @@ jobs:
         if: github.event_name != 'pull_request'
         # Write the certificate (Secret) to a file
         run: |
-          echo "${{ secrets.CERTIFICATE }}" > tee/private.pem
+          # Instead of using a certificate, create a dummy one for simulation mode
+          mkdir -p tee
+          openssl genrsa -out tee/private.pem -3 3072
 
       - name: Build
         uses: docker/build-push-action@v6
@@ -82,7 +84,7 @@ jobs:
           builder: ${{ steps.buildx.outputs.name }}
           build-args: |
             VERSION=${{ steps.prep.outputs.binary_version }}
-            DISTRIBUTOR_PUBKEY=MIICHzANBgkqhkiG9w0BAQEFAAOCAgwAMIICBwKCAgAK57R9kf/nd1Pg/r5gJmGp7lhFx+k+tUXlrveNT0tnuGfaxLhHlvhsbJJuVN/nbuA0nMZ4s/7kWv0Rpw9d8a53ekiVgXmlaaVL74PkqWytJkiuG/f47bK6FUv35MTQPYxZG2hrQvW6e6k/WzVwEzN0QeixjJvg0NaLHSbotdTDUCPoTnujUhVciX938DNjERh9uDvxWGGXsDyUFZcjF6EGnoWIJtwTPL/GuH8SAvU9KFM8zf/DJ9Y72BmTSVcFYMT1HeZ1kucb/qp6Yuyn0zdDlaIKkxoCJr6hVtR5hX1UDocKLglO2AAdufifXe3NJWHNndA+mbn9tPOWXKR1PrzhBGqbA2//BaAMdjP89lcgpCEQFmG1631FThJ/KFSuIzckIXQV2C0lId0JqBL66SPfWnYYi4ID3E5mk08YZv3VDaTgABMvX3elVmB6i5DfhEr7Kmu0DI/X3MYeKi3+P8IYCoHDqqkESveB49Mr46kEUIKZh51lf+wPMV0gySIUG1NMYjyM/Jx/KYylptHwmLkTswZe2bsODWd+jFRGIChEEdww4Zc/yBThGFHy2Qu8YYwIElQJVMcjVtRicR+v41g1w788HFvfAlPsmNdpE1Z++vTrwYysVVSuYvASTn8gewo+jZu671O2fWZp9/5tSR1M9ItBeP6k0iHcXXFD90SVQQIBAw==
+            DISTRIBUTOR_PUBKEY=""
           context: ./
           file: ./Dockerfile
           secret-files: |
