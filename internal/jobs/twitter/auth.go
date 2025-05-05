@@ -32,10 +32,8 @@ func NewScraper(config AuthConfig) *Scraper {
 	// Try loading cookies
 	if err := LoadCookies(scraper.Scraper, config.Account, config.BaseDir); err == nil {
 		logrus.Debugf("Cookies loaded for user %s.", config.Account.Username)
-		// if scraper.IsLoggedIn() {
 		logrus.Debugf("Already logged in as %s.", config.Account.Username)
 		return scraper
-		// }
 	}
 
 	RandomSleep()
