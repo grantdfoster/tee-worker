@@ -13,7 +13,6 @@ type AuthConfig struct {
 	BaseDir string
 	// SkipLoginVerification when true, skips the IsLoggedIn check after loading cookies
 	// This can help avoid rate limiting on Twitter's verify_credentials endpoint
-	// Default is false (verification enabled)
 	SkipLoginVerification bool
 }
 
