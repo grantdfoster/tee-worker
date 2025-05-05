@@ -21,6 +21,8 @@ ENV VERSION=${VERSION}
 ARG DISTRIBUTOR_PUBKEY=""
 # Set GO_TEST for tests to correctly handle TEE operations
 ENV GO_TEST=true
+# Set CI environment to skip SGX-specific tests
+ENV CI=true
 RUN DISTRIBUTOR_PUBKEY=${DISTRIBUTOR_PUBKEY} make build
 
 # Create a dummy certificate if one doesn't exist

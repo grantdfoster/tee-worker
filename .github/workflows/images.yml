@@ -76,6 +76,9 @@ jobs:
           builder: ${{ steps.buildx.outputs.name }}
           build-args: |
             VERSION=${{ steps.prep.outputs.binary_version }}
+            DISTRIBUTOR_PUBKEY=""
+            CI=true
+            GO_TEST=true
           context: ./
           file: ./Dockerfile
           platforms: linux/amd64
