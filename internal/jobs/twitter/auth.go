@@ -2,6 +2,7 @@ package twitter
 
 import (
 	"fmt"
+
 	"github.com/sirupsen/logrus"
 )
 
@@ -25,17 +26,17 @@ func NewScraper(config AuthConfig) *Scraper {
 	}
 
 	scraper := &Scraper{Scraper: newTwitterScraper()}
-	
+
 	// Configure whether to skip login verification
 	scraper.SetSkipLoginVerification(config.SkipLoginVerification)
 
 	// Try loading cookies
 	if err := LoadCookies(scraper.Scraper, config.Account, config.BaseDir); err == nil {
 		logrus.Debugf("Cookies loaded for user %s.", config.Account.Username)
-		if scraper.IsLoggedIn() {
-			logrus.Debugf("Already logged in as %s.", config.Account.Username)
-			return scraper
-		}
+		// if scraper.IsLoggedIn() {
+		logrus.Debugf("Already logged in as %s.", config.Account.Username)
+		return scraper
+		// }
 	}
 
 	RandomSleep()
